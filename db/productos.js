@@ -3,7 +3,7 @@ export const productos = [
     id: 1,
     nombre: "Resident Evil 2 Remake Standard Edition Capcom PS4 Físico" ,
     precio: 35500,
-    imagen: "https://uvejuegos.com/img/caratulas/57233/resident-evil-2-remake-EU.jpg" ,
+    imagen: "https://i.pinimg.com/originals/e4/65/99/e46599f46774154fe547ecf334639f4d.jpg" ,
     categoria: "juegos"
 },
 {

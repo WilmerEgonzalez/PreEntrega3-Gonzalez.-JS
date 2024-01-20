@@ -64,7 +64,22 @@
             
             <p>Busque su producto aqui</p>
             <div id="productos"></div>
-            <div id="carrito"></div>
+            <div id="carrito">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Imagen</th>
+                            <th>Nombre</th>
+                            <th>Unidades</th>
+                            <th>Costo unitario</th>
+                            <th>Costo total</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>id="items"</tbody>
+                    <tfoot>id="totales"</tfoot>
+                </table>
+            </div>
             <input type="text" id="filter_input">
 
     <script type="module" src="./db/productos.js"></script>
