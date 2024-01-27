@@ -9,8 +9,22 @@ document.addEventListener("DOMContentLoaded", () => {
 let carrito = JSON.parse(sessionStorage.getItem("carrito"))
 const listaCarrito = document.getElementById("items")
 const footCarrito = document.getElementById("totales")
+const btnCarrito = document.getElementById("btnCarrito")
+
+const carritoTable = document.getElementById("carrito")
+
+btnCarrito.addEventListener("click", () => {
+    dibujarCarrito()
+    if(carritoTable.style.display === "block"){
+        carritoTable.style.display = "none"
+    }else{
+        carritoTable.style.display = "block"
+    }
+    
+})
 
 export const comprarProducto = (idProducto) => {
+
     
     const producto = productosDisponibles.find((producto) => producto.id === idProducto)
 
@@ -40,38 +54,102 @@ export const comprarProducto = (idProducto) => {
     }
     carrito = JSON.parse(sessionStorage.getItem("carrito"))
 
+    alert(`Usted compro el producto ${nombre}`)
 
 }
 
 const dibujarCarrito = () => {
 
+    listaCarrito.innerHTML = ''
+
     carrito.forEach(producto => {
-
-        const { imagen, nombre, cantidad, precio, id } = producto
-
-        let body = document.createElement("tr")
-
-        body.className = "producto__carrito"
-
+        const { imagen, nombre, cantidad, precio, id } = producto;
+    
+        let body = document.createElement("tr");
+    
+        body.className = "producto__carrito";
+    
         body.innerHTML = `
-        <th><img id="fotoProductoCarrito" src="${imagen}" class="card-img-top"</th>
+        <td><img id="fotoProductoCarrito" src="${imagen}" class="card-img-top" style="width:40%; height: 30%"</td>
         <td>${nombre}</td>
         <td>${cantidad}</td>
-        <td>${precio/cantidad}</td>
+        <td>${precio / cantidad}</td>
         <td>${precio}</td>
         <td>
-        <button id="+${id}" class="btn btn-success">+</button>
-        <button id="-${id}" class="btn btn-danger">-</button>
+            <button id="+${id}" class="btn btn-success">+</button>
+            <button id="-${id}" class="btn btn-danger">-</button>
         </td>
+        `;
+    
+        listaCarrito.append(body);
+    
+        const btnAgregar = document.getElementById(`+${id}`);
+        const btnRestar = document.getElementById(`-${id}`);
+    
+        btnAgregar.addEventListener("click", () => aumentarCantidad(id));
+        btnRestar.addEventListener("click", () => restarCantidad(id));
+    });
+    
+    dibujarFooter();
+}    
+
+const dibujarFooter = () => {
+
+    if(carrito.length > 0){
+        footCarrito.innerHTML = ""
+
+        let footer = document.createElement("tr")
+
+        footer.innerHTML = `
+        <th><b>Totales:</b></th>
+        <td></td>
+        <td>${generarTotales().cantidadTotal}</td>
+        <td></td>
+        <td>${generarTotales().costoTotal}</td>
         `
 
-        listaCarrito.append(body)
+        footCarrito.append(footer)
+    }else{
+        footCarrito.innerHTML = "<h3>No hay productos en el carrito</h3>"
+    }
+}
 
-        const btnAgregar = document.getElementById(`+${id}`)
-        const btnRestar = document.getElementById(`-${id}`)
+const generarTotales = () => {
+    const costoTotal = carrito.reduce((total, { precio }) => totales + precio, 0)
+    const cantidadTotal = carrito.reduce((total, {cantidad}) => total + cantidad, 0)
 
-        btnAgregar.addEventListener("click", () => console.log(id))
-        btnRestar.addEventListener("click", () => console.log(id))
-    });
+    return {
+        costoTotal: costoTotal,
+        cantidadTotal: cantidadTotal
+    }
+}
+
+const aumentarCantidad = (id) => {
+    const indexProductoCarrito = carrito.findIndex((producto) => producto.id === id)
+    const precio = carrito[indexProductoCarrito].precio / carrito[indexProductoCarrito].cantidad
+
+    carrito[indexProductoCarrito].cantidad++
+    carrito[indexProductoCarrito].precio = precio*carrito[indexProductoCarrito].cantidad
+
+    sessionStorage.setItem("carrito", JSON.stringify(carrito))
+
+    dibujarCarrito()
+
+}
+
+const restarCantidad = (id) => {
+    const indexProductoCarrito = carrito.findIndex((producto) => producto.id === id)
+    const precio = carrito[indexProductoCarrito].precio / carrito[indexProductoCarrito].cantidad
+
+    carrito[indexProductoCarrito].cantidad--
+    carrito[indexProductoCarrito].precio = precio*carrito[indexProductoCarrito].cantidad
+
+    if(carrito[indexProductoCarrito].cantidad === 0){
+        carrito.splice(indexProductoCarrito, 1)
+    }
+
+    sessionStorage.setItem("carrito", JSON.stringify(carrito))
+
+    dibujarCarrito()
 }
 

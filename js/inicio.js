@@ -8,6 +8,7 @@ const divProductos = document.getElementById("productos")
 export let productosDisponibles = JSON.parse(localStorage.getItem("productos"))
 
 document.addEventListener("DOMContentLoaded", () => {
+   
     generarCardsProductos(productosDisponibles)
 })
 
@@ -16,13 +17,14 @@ export const generarCardsProductos = (productos) => {
 
     productos.forEach((producto) => {
         
+
    const { imagen, nombre, categoria, precio, id } = producto
 
     let card = document.createElement("div")
     card.className = "producto";
     card.innerHTML = `
     <div class="card" style="width: 18rem;">
-    <img class="card-img-top" src="${imagen} alt="Card image cap">
+    <img class="card-img-top" src="${imagen}" alt="Card image cap">
     <div class="card-body">
     <h5 class="card-title">${nombre}</h5>
     <p class="card-text">${categoria}</p>
